@@ -25,8 +25,7 @@ class Settings:
     # Modelos disponíveis
     MODELS = {
         "flux-schnell": "black-forest-labs/flux-schnell",
-        "flux-dev": "black-forest-labs/flux-dev",
-        "sdxl": "stability-ai/sdxl"
+        "flux-dev": "black-forest-labs/flux-dev"
     }
 
     # Modelo padrão (flux-dev conforme solicitado)

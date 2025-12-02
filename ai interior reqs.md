@@ -1,0 +1,6 @@
+- **design exterior;**  
+- **redesign interior \-** (**Style:** eclectic, modern, minimalist, contemporary, scandinavian, mediterranean, industrial, bohemian, rustic, japanese design, arabic, futuristic, luxurious, retro, professional, vintage, eco friendly, gothic | **Room type:** living room, bedroom, bathroom, kitchen, dining room, home office, study room, office, coworking);  
+- **design from ‘zero’ \-** (**Style:** eclectic, modern, minimalist, contemporary, scandinavian, mediterranean, industrial, bohemian, rustic, japanese design, arabic, futuristic, luxurious, retro, professional, vintage, eco friendly, gothic | **Room type:** living room, bedroom, bathroom, kitchen, dining room, home office, study room, office, coworking);  
+- **recolor;**   
+- **reference style;**  
+- **garden design;**

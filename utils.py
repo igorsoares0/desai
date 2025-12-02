@@ -57,9 +57,47 @@ def optimize_image(image_bytes: bytes, max_dimension: int = 1024) -> bytes:
 
     return output.read()
 
-def build_prompt(style: str, room_type: str) -> str:
+# Estilos expandidos com todos os novos
+STYLE_DESCRIPTIONS = {
+    "eclectic": "eclectic, mixed styles, diverse elements, unique combinations, artistic",
+    "modern": "modern, clean lines, neutral colors, contemporary furniture",
+    "minimalist": "minimalist, simple, white and wood tones, uncluttered",
+    "contemporary": "contemporary, sleek, sophisticated, mixed materials",
+    "scandinavian": "scandinavian, cozy, natural materials, bright and airy",
+    "mediterranean": "mediterranean, warm colors, terracotta, natural textures, coastal vibes",
+    "industrial": "industrial style, exposed brick, metal fixtures, concrete, raw materials",
+    "bohemian": "bohemian, colorful, eclectic, plants, textured fabrics, relaxed",
+    "rustic": "rustic, wooden elements, warm tones, natural textures",
+    "japanese_design": "japanese design, zen, minimalist, natural wood, tatami, shoji screens",
+    "arabic": "arabic, ornate patterns, rich colors, arches, mosaic tiles, luxurious textiles",
+    "futuristic": "futuristic, high-tech, sleek, metallic, LED lighting, cutting-edge design",
+    "luxurious": "luxurious, opulent, rich materials, elegant, high-end furnishings, sophisticated",
+    "retro": "retro, vintage inspired, bold colors, nostalgic elements, mid-century influences",
+    "professional": "professional, corporate, clean, organized, modern office aesthetic",
+    "vintage": "vintage, antique, classic pieces, timeless, traditional craftsmanship",
+    "eco_friendly": "eco-friendly, sustainable materials, natural, green, organic, recycled elements",
+    "gothic": "gothic, dark colors, dramatic, ornate details, Victorian influences, moody",
+    "traditional": "traditional, classic, elegant, rich colors",
+    "coastal": "coastal, beach inspired, light colors, natural light",
+    "midcentury": "mid-century modern, retro, clean lines, organic shapes"
+}
+
+# Room types expandidos
+ROOM_DESCRIPTIONS = {
+    "living_room": "living room",
+    "bedroom": "bedroom",
+    "bathroom": "bathroom",
+    "kitchen": "kitchen",
+    "dining_room": "dining room",
+    "home_office": "home office",
+    "study_room": "study room",
+    "office": "office",
+    "coworking": "coworking space"
+}
+
+def build_prompt_interior(style: str, room_type: str) -> str:
     """
-    Constrói o prompt otimizado para geração
+    Constrói prompt para redesign de interiores
 
     Args:
         style: Estilo selecionado
@@ -68,33 +106,76 @@ def build_prompt(style: str, room_type: str) -> str:
     Returns:
         Prompt formatado
     """
-    style_descriptions = {
-        "modern": "modern, clean lines, neutral colors, contemporary furniture",
-        "minimalist": "minimalist, simple, white and wood tones, uncluttered",
-        "industrial": "industrial style, exposed brick, metal fixtures, concrete",
-        "scandinavian": "scandinavian, cozy, natural materials, bright and airy",
-        "bohemian": "bohemian, colorful, eclectic, plants, textured fabrics",
-        "rustic": "rustic, wooden elements, warm tones, natural textures",
-        "contemporary": "contemporary, sleek, sophisticated, mixed materials",
-        "traditional": "traditional, classic, elegant, rich colors",
-        "coastal": "coastal, beach inspired, light colors, natural light",
-        "midcentury": "mid-century modern, retro, clean lines, organic shapes"
-    }
-
-    room_descriptions = {
-        "living_room": "living room",
-        "bedroom": "bedroom",
-        "kitchen": "kitchen",
-        "bathroom": "bathroom",
-        "office": "home office",
-        "dining_room": "dining room",
-        "kids_room": "kids room",
-        "master_bedroom": "master bedroom"
-    }
-
-    style_desc = style_descriptions.get(style.lower(), "modern")
-    room_desc = room_descriptions.get(room_type.lower(), "living room")
+    style_desc = STYLE_DESCRIPTIONS.get(style.lower(), "modern")
+    room_desc = ROOM_DESCRIPTIONS.get(room_type.lower(), "living room")
 
     prompt = f"{style_desc} {room_desc}, professional interior design, photorealistic, high quality, architectural photography, well lit, 8k resolution"
+
+    return prompt
+
+def build_prompt_exterior(style: str) -> str:
+    """
+    Constrói prompt para design de exterior/fachada
+
+    Args:
+        style: Estilo arquitetônico
+
+    Returns:
+        Prompt formatado
+    """
+    style_desc = STYLE_DESCRIPTIONS.get(style.lower(), "modern")
+
+    prompt = f"{style_desc} house exterior, architectural facade, professional architecture photography, beautiful landscaping, well maintained, high quality, photorealistic, 8k resolution, natural lighting"
+
+    return prompt
+
+def build_prompt_garden(style: str, garden_type: str = "garden") -> str:
+    """
+    Constrói prompt para design de jardins com foco em fotorrealismo
+
+    Args:
+        style: Estilo de jardim
+        garden_type: Tipo (garden, backyard, front yard, etc)
+
+    Returns:
+        Prompt formatado para máximo realismo fotográfico
+    """
+    style_desc = STYLE_DESCRIPTIONS.get(style.lower(), "modern")
+
+    garden_types = {
+        "garden": "garden",
+        "backyard": "backyard",
+        "front_yard": "front yard",
+        "patio": "patio",
+        "terrace": "terrace",
+        "rooftop": "rooftop garden"
+    }
+
+    garden_desc = garden_types.get(garden_type.lower(), "garden")
+
+    # Prompt ultra-direto focado em fotografia real
+    prompt = (
+        f"real photograph, {style_desc} {garden_desc}, "
+        f"actual outdoor photo, DSLR camera, natural lighting, "
+        f"real garden, photorealistic, professional landscape photography"
+    )
+
+    return prompt
+
+def build_prompt_reference(room_type: str) -> str:
+    """
+    Constrói prompt para reference style transfer
+    Este prompt instrui o modelo a transferir o estilo da imagem de referência
+    para a imagem base, mantendo a estrutura do ambiente
+
+    Args:
+        room_type: Tipo de cômodo
+
+    Returns:
+        Prompt formatado
+    """
+    room_desc = ROOM_DESCRIPTIONS.get(room_type.lower(), "room")
+
+    prompt = f"{room_desc} interior design, match the style and aesthetic from reference image, apply color palette and design elements from reference, maintain room structure, professional interior design, photorealistic, high quality, well lit, 8k resolution"
 
     return prompt
