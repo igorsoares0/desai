@@ -97,35 +97,55 @@ ROOM_DESCRIPTIONS = {
 
 def build_prompt_interior(style: str, room_type: str) -> str:
     """
-    Constrói prompt para redesign de interiores
+    Constrói prompt otimizado para redesign de interiores com máximo fotorrealismo
 
     Args:
         style: Estilo selecionado
         room_type: Tipo de cômodo
 
     Returns:
-        Prompt formatado
+        Prompt formatado para alta qualidade e realismo
     """
     style_desc = STYLE_DESCRIPTIONS.get(style.lower(), "modern")
     room_desc = ROOM_DESCRIPTIONS.get(room_type.lower(), "living room")
 
-    prompt = f"{style_desc} {room_desc}, professional interior design, photorealistic, high quality, architectural photography, well lit, 8k resolution"
+    # Prompt otimizado para fotorrealismo, composição e definição profissional
+    prompt = (
+        f"{style_desc} {room_desc}, "
+        f"professional interior design photography, "
+        f"shot with DSLR camera, wide angle lens, "
+        f"perfect composition, rule of thirds, "
+        f"natural lighting with ambient light, "
+        f"photorealistic, hyperrealistic rendering, "
+        f"sharp focus, high detail textures, "
+        f"architectural photography, magazine quality, "
+        f"8k uhd, crystal clear, professional grade"
+    )
 
     return prompt
 
 def build_prompt_exterior(style: str) -> str:
     """
-    Constrói prompt para design de exterior/fachada
+    Constrói prompt para redesign de exterior mantendo estrutura arquitetônica
 
     Args:
         style: Estilo arquitetônico
 
     Returns:
-        Prompt formatado
+        Prompt formatado para manter estrutura e mudar apenas estilo
     """
     style_desc = STYLE_DESCRIPTIONS.get(style.lower(), "modern")
 
-    prompt = f"{style_desc} house exterior, architectural facade, professional architecture photography, beautiful landscaping, well maintained, high quality, photorealistic, 8k resolution, natural lighting"
+    # Prompt com forte ênfase em MANTER estrutura e mudar APENAS estilo
+    prompt = (
+        f"{style_desc} architectural style applied to house exterior, "
+        f"keep same building structure and shape, "
+        f"maintain original architecture layout, "
+        f"same windows and doors placement, "
+        f"only change facade style and materials to {style_desc}, "
+        f"professional architecture photography, "
+        f"photorealistic, high quality, sharp focus, natural lighting"
+    )
 
     return prompt
 

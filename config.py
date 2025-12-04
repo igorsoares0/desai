@@ -25,7 +25,8 @@ class Settings:
     # Modelos disponíveis
     MODELS = {
         "flux-schnell": "black-forest-labs/flux-schnell",
-        "flux-dev": "black-forest-labs/flux-dev"
+        "flux-dev": "black-forest-labs/flux-dev",
+        "flux-canny-pro": "black-forest-labs/flux-canny-pro"
     }
 
     # Modelo padrão (flux-dev conforme solicitado)

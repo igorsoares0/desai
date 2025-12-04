@@ -80,17 +80,17 @@ async def redesign_interior(
     image: UploadFile = File(..., description="Imagem do ambiente atual"),
     style: str = Form(..., description="Estilo desejado"),
     room_type: str = Form(..., description="Tipo de cômodo"),
-    strength: float = Form(0.7, ge=0.0, le=1.0, description="Força da transformação (0.0-1.0)"),
     model: str = Form("flux-dev", description="Modelo a usar")
 ):
     """
-    Redesign de interiores - transforma ambiente existente em novo estilo
+    Redesign de interiores - transforma ambiente com máximo fotorrealismo e qualidade
 
     - **image**: Foto do ambiente atual (JPG, PNG)
     - **style**: Estilo desejado (modern, minimalist, industrial, scandinavian, etc)
     - **room_type**: Tipo de cômodo (living_room, bedroom, kitchen, etc)
-    - **strength**: Quanto transformar (0.3=conservador, 0.7=balanceado, 0.9=criativo)
     - **model**: Modelo de IA (flux-dev recomendado)
+
+    OBS: Usa strength fixo de 0.6 (balanceado para realismo), 35 steps e guidance 9.5
     """
     start_time = time.time()
 
@@ -119,9 +119,9 @@ async def redesign_interior(
                     input={
                         "image": image_file,
                         "prompt": prompt,
-                        "num_inference_steps": 28,
-                        "guidance_scale": 7.5,
-                        "strength": strength
+                        "num_inference_steps": 35,  # Aumentado para melhor qualidade/definição
+                        "guidance_scale": 9.5,  # Aumentado para mais fidelidade ao prompt fotorrealista
+                        "strength": 0.6  # Fixo: balanceado para máximo realismo
                     }
                 )
 
@@ -158,16 +158,17 @@ async def redesign_interior(
 async def design_exterior(
     image: UploadFile = File(..., description="Imagem da fachada/exterior atual"),
     style: str = Form(..., description="Estilo arquitetônico desejado"),
-    strength: float = Form(0.7, ge=0.0, le=1.0, description="Força da transformação (0.0-1.0)"),
-    model: str = Form("flux-dev", description="Modelo a usar")
+    model: str = Form("flux-canny-pro", description="Modelo a usar")
 ):
     """
-    Design de exterior/fachada - transforma exterior de casas e prédios
+    Design de exterior/fachada - MANTÉM estrutura da casa, muda apenas o estilo
+    Usa ControlNet com Canny edge detection para preservar estrutura arquitetônica
 
     - **image**: Foto da fachada/exterior atual (JPG, PNG)
     - **style**: Estilo arquitetônico (modern, mediterranean, contemporary, etc)
-    - **strength**: Quanto transformar (0.3=conservador, 0.7=balanceado, 0.9=criativo)
-    - **model**: Modelo de IA (flux-dev recomendado)
+    - **model**: Modelo de IA (flux-canny-pro RECOMENDADO - usa edge detection)
+
+    OBS: Usa Canny edge detection automático para PRESERVAR 100% da estrutura arquitetônica
     """
     start_time = time.time()
 
@@ -194,11 +195,11 @@ async def design_exterior(
                 output = replicate.run(
                     model_name,
                     input={
-                        "image": image_file,
+                        "control_image": image_file,  # Canny usa control_image
                         "prompt": prompt,
-                        "num_inference_steps": 28,
-                        "guidance_scale": 7.5,
-                        "strength": strength
+                        "steps": 40,  # Passos de difusão (15-50, default 50)
+                        "guidance": 50,  # Máximo para preservar estrutura (1-100)
+                        "output_format": "jpg"
                     }
                 )
 
@@ -505,6 +506,13 @@ async def get_models():
                 "description": "Alta qualidade (RECOMENDADO)",
                 "speed": "25-35s",
                 "cost": "$0.003"
+            },
+            {
+                "id": "flux-canny-pro",
+                "name": "Flux Canny Pro",
+                "description": "Edge detection para preservar estrutura (EXTERIOR)",
+                "speed": "45-50s",
+                "cost": "$0.05"
             }
         ]
     }
