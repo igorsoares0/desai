@@ -198,7 +198,7 @@ async def design_exterior(
                         "control_image": image_file,  # Canny usa control_image
                         "prompt": prompt,
                         "steps": 40,  # Passos de difusão (15-50, default 50)
-                        "guidance": 50,  # Máximo para preservar estrutura (1-100)
+                        "guidance": 7.5,  # Máximo para preservar estrutura (1-100)
                         "output_format": "jpg"
                     }
                 )
